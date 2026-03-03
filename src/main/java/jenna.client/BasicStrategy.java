@@ -43,6 +43,47 @@ public class BasicStrategy {
             /* 12 */ { H, H, S, S, S, H, H, H, H, H }
     };
 
+    // Rules for section 2
+    Play[][] section2Rules = {
+            /*         2  3  4  5  6  7  8  9  T  A  */
+            /* 11 */ { D, D, D, D, D, D, D, D, D, H },
+            /* 10 */ { D, D, D, D, D, D, D, D, H, H },
+            /* 9  */ { H, D, D, D, D, H, H, H, H, H },
+            /* 8  */ { H, H, H, H, H, H, H, H, H, H },
+            /* 7  */ { H, H, H, H, H, H, H, H, H, H },
+            /* 6  */ { H, H, H, H, H, H, H, H, H, H },
+            /* 5  */ { H, H, H, H, H, H, H, H, H, H },
+    };
+
+    // Rules for section 3
+    Play[][] section3Rules = {
+            /*          2  3  4  5  6  7  8  9  T  A  */
+            /* A,10 */{ S, S, S, S, S, S, S, S, S, S },
+            /* A,9 */ { S, S, S, S, S, S, S, S, S, S },
+            /* A,8 */ { S, S, S, S, S, S, S, S, S, S },
+            /* A,7 */ { S, D, D, D, D, S, S, H, H, H },
+            /* A,6 */ { H, D, D, D, D, H, H, H, H, H },
+            /* A,5 */ { H, H, D, D, D, H, H, H, H, H },
+            /* A,4 */ { H, H, D, D, D, H, H, H, H, H },
+            /* A,3 */ { H, H, H, D, D, H, H, H, H, H },
+            /* A,2 */ { H, H, H, D, D, H, H, H, H, H },
+    };
+
+    // Rules for section 4
+    Play[][] section4Rules = {
+            /*           2  3  4  5  6  7  8  9  T  A  */
+            /* A,A */  { P, P, P, P, P, P, P, P, P, P },
+            /* 10,10 */{ S, S, S, S, S, S, S, S, S, S },
+            /* 9,9 */  { P, P, P, P, P, S, P, P, S, S },
+            /* 8,8 */  { P, P, P, P, P, P, P, P, P, P },
+            /* 7,7 */  { P, P, P, P, P, P, H, H, H, H },
+            /* 6,6 */  { P, P, P, P, P, H, H, H, H, H },
+            /* 5,5 */  { D, D, D, D, D, D, D, D, H, H },
+            /* 4,4 */  { H, H, H, P, P, H, H, H, H, H },
+            /* 3,3 */  { P, P, P, P, P, P, H, H, H, H },
+            /* 2,2 */  { P, P, P, P, P, P, H, H, H, H },
+    };
+
     /**
      * Gets the play for player's hand vs. dealer up-card.
      * @param hand Hand player hand
@@ -54,13 +95,13 @@ public class BasicStrategy {
         Card card2 = hand.getCard(1);
 
         if(hand.isPair()) {
-            // TODO: return doSection4(hand,upCard)
+            return doSection4(hand,upCard);
         }
         else if(hand.size() == 2 && (card1.getRank() == Card.ACE || card2.getRank() == Card.ACE)) {
-            // TODO: return doSection3(hand,upCard)
+            return doSection3(hand,upCard);
         }
         else if(hand.getValue() >=5 && hand.getValue() < 12) {
-            // TODO: return doSection2(hand,upCard)
+            return doSection2(hand,upCard);
         }
         else if(hand.getValue() >= 12)
             return doSection1(hand,upCard);
@@ -76,19 +117,15 @@ public class BasicStrategy {
     protected Play doSection1(Hand hand, Card upCard) {
         int value = hand.getValue();
 
-        // Section 1 currently only supports hands >= 20 (see above).
+        // Section 1 supports hands >= 12.
         if(value < 12)
             return Play.NONE;
-
-        // TODO: Complete getting the row in the table.
 
         // Subtract 21 since the player's hand starts at 21 and we're working
         // our way down through section 1 from index 0.
         int rowIndex = 21 - value;
 
         Play[] row = section1Rules[rowIndex];
-
-        // TODO: Complete getting the column in the table.
 
         // Subtract 2 since the dealer's up-card starts at 2
         int colIndex = upCard.getRank() - 2;
@@ -106,13 +143,106 @@ public class BasicStrategy {
         return play;
     }
 
+    protected Play doSection2(Hand hand, Card upCard) {
+        int value = hand.getValue();
+
+        // Section 2 supports hands >= 5.
+        if(value < 5)
+            return Play.NONE;
+
+        int rowIndex = 11 - value;
+
+        Play[] row = section2Rules[rowIndex];
+
+        // Subtract 2 since the dealer's up-card starts at 2
+        int colIndex = upCard.getRank() - 2;
+
+        if(upCard.isFace())
+            colIndex = 10 - 2;
+
+            // Ace is the 10th card (index 9)
+        else if(upCard.isAce())
+            colIndex = 9;
+
+        // At this row, col we should have the correct play defined.
+        Play play = row[colIndex];
+
+        return play;
+    }
+
+    protected Play doSection3(Hand hand, Card upCard) {
+        int value = hand.getValue();
+
+        // Section 3 supports hands >= 13.
+        if(value < 13 )
+            return Play.NONE;
+
+        int rowIndex = 21 - value;
+
+        Play[] row = section3Rules[rowIndex];
+
+        // Subtract 2 since the dealer's up-card starts at 2
+        int colIndex = upCard.getRank() - 2;
+
+        if(upCard.isFace())
+            colIndex = 10 - 2;
+
+            // Ace is the 10th card (index 9)
+        else if(upCard.isAce())
+            colIndex = 9;
+
+        // At this row, col we should have the correct play defined.
+        Play play = row[colIndex];
+
+        return play;
+    }
+
+    protected Play doSection4(Hand hand, Card upCard) {
+        int value = hand.getValue();
+
+        // Section 4 only supports hands that are pairs.
+        if(!hand.isPair())
+            return Play.NONE;
+
+        // Gets rank of pair
+        int rank = hand.getCard(0).getRank();
+        int rowIndex;
+
+        // Map rank to row index
+        if (hand.getCard(0).isAce()) {
+            rowIndex = 0;
+        } else if (hand.getCard(0).isFace() || rank == 10) {
+            rowIndex = 1;
+        } else {
+            // Ranks 2-9 map to indices 9 down to 2
+            // Calculation: 11 - rank (e.g., Rank 9: 11-9 = index 2)
+            rowIndex = 11 - rank;
+        }
+
+        Play[] row = section4Rules[rowIndex];
+
+        // Subtract 2 since the dealer's up-card starts at 2
+        int colIndex = upCard.getRank() - 2;
+
+        if(upCard.isFace())
+            colIndex = 10 - 2;
+
+            // Ace is the 10th card (index 9)
+        else if(upCard.isAce())
+            colIndex = 9;
+
+        // At this row, col we should have the correct play defined.
+        Play play = row[colIndex];
+
+        return play;
+    }
     /**
      * Validates a hand and up-card.
      * @param hand Hand
      * @param upCard Up-card
      * @return True if both are valid, false otherwise
      */
-    boolean isValid(Hand hand, Card upCard) {
+    public boolean isValid(Hand hand, Card upCard) {
         return isValid(hand) && isValid(upCard);
     }
 
@@ -121,8 +251,20 @@ public class BasicStrategy {
      * @param hand Hand
      * @return True if valid, false otherwise
      */
-    boolean isValid(Hand hand) {
-        // TODO: Complete.
+    public boolean isValid(Hand hand) {
+        if (hand == null) {
+            return false;
+        }
+
+        if (hand.size() < 2 || hand.size() >= 5) {
+            return false;
+        }
+
+        // validates hand has not bust yet or has a 0 or less than minimum possible value
+        if (hand.getValue() >= 21 || hand.getValue() < 2) {
+            return false;
+        }
+
         return true;
     }
 
@@ -131,8 +273,21 @@ public class BasicStrategy {
      * @param card Card
      * @return True if valid, false otherwise
      */
-    boolean isValid(Card card) {
-        // TODO: Complete.
+    public boolean isValid(Card card) {
+        if (card == null) {
+            return false;
+        }
+
+        // validates there are no negative cards and nothing more than rank 13
+        if (card.getRank() <= 0 && card.getRank() > 13) {
+            return false;
+        }
+
+        // validates suit exists
+        if(card.getSuit() != Card.Suit.SPADES || card.getSuit() != Card.Suit.CLUBS || card.getSuit() != Card.Suit.HEARTS || card.getSuit() != Card.Suit.DIAMONDS) {
+            return false;
+        }
+
         return true;
     }
 }

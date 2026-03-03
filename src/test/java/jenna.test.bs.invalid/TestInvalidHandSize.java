@@ -1,0 +1,24 @@
+package jenna.test.bs.invalid;
+
+import charlie.card.Hid;
+import charlie.dealer.Seat;
+import junit.framework.TestCase;
+import charlie.card.Card;
+import charlie.card.Hand;
+import jenna.client.BasicStrategy;
+
+public class TestInvalidHandSize extends TestCase{
+    public void test() {
+        BasicStrategy strategy = new BasicStrategy();
+
+        // Invalid hand with only one card
+        Hand myHand = new Hand(new Hid(Seat.YOU));
+        myHand.hit(new Card(9, Card.Suit.DIAMONDS));
+
+        // Valid upCard
+        Card upCard = new Card(10, Card.Suit.DIAMONDS);
+
+        // myHand only has one card, so isValid should return false, so negate to test
+        assert !strategy.isValid(myHand);
+    }
+}
