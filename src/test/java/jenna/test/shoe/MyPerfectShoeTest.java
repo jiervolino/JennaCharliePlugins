@@ -12,8 +12,6 @@
 
 package jenna.test.shoe;
 
-// HELLO SHOE
-
 import charlie.actor.Courier;
 import charlie.card.Card;
 import charlie.card.Hand;
@@ -25,7 +23,7 @@ import java.util.List;
 
 /**
  * This class is the minimalist perfect  test case.
- * @author Ron.Coleman
+ * @author Jenna Iervolino
  */
 public class MyPerfectShoeTest extends Perfect implements IUi {
     private Hid you;

@@ -256,12 +256,13 @@ public class BasicStrategy {
             return false;
         }
 
+        // Hand has at least 2 cards
         if (hand.size() < 2 || hand.size() >= 5) {
             return false;
         }
 
-        // validates hand has not bust yet or has a 0 or less than minimum possible value
-        if (hand.getValue() >= 21 || hand.getValue() < 2) {
+        // validates hand has not bust yet or has a 0 or less than minimum possible value (4)
+        if (hand.getValue() >= 21 || hand.getValue() < 4) {
             return false;
         }
 
