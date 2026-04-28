@@ -1,4 +1,4 @@
-package jenna.test.shoe;
+package shoe;
 
 import charlie.card.Card;
 import charlie.plugin.IShoe;

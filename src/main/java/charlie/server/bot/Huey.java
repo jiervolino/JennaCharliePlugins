@@ -111,6 +111,21 @@ public class Huey implements IBot {
 
                     Play advice = bs.getPlay(myHand, upCard);
 
+                    /*
+                    Play play = strategy.getPlay(myHand,upCard);
+                    new Thread (() -> {
+                        think();
+                        switch(play){
+                            case STAY -> dealer.stay(this,hid)
+                            case HIT -> dealer.hit (this,hid)
+                            case DOUBLE_DOWN -> deather.doubleDown(this,hid)
+                            case Split -> dealer.split(this,hid)
+                            default -> {
+                                assert false: "invalid " + play
+                            }
+                        }
+                    }).start();
+                     */
 
                     if (advice == Play.HIT) {
                         dealer.hit(Huey.this, myHand.getHid());

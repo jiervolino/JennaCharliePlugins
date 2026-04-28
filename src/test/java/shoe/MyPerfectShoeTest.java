@@ -10,7 +10,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package jenna.test.shoe;
+package shoe;
 
 import charlie.actor.Courier;
 import charlie.card.Card;
